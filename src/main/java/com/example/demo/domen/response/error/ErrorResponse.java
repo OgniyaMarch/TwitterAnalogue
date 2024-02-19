@@ -2,7 +2,6 @@ package com.example.demo.domen.response.error;
 
 
 import com.example.demo.domen.response.Response;
-import com.example.demo.domen.response.error.Error;
 import lombok.Builder;
 import lombok.Data;
 

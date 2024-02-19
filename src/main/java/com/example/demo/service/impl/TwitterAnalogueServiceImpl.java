@@ -1,9 +1,9 @@
 package com.example.demo.service.impl;
 
 
-import com.example.demo.domen.response.error.Error;
-import com.example.demo.domen.response.error.ErrorResponse;
+import com.example.demo.domen.constant.Code;
 import com.example.demo.domen.response.Response;
+import com.example.demo.domen.response.exception.CommonException;
 import com.example.demo.service.TwitterAnalogueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,35 +18,14 @@ public class TwitterAnalogueServiceImpl  implements TwitterAnalogueService {
 
     @Override
     public ResponseEntity<Response> test(){
-        /*return new ResponseEntity<>
-                (SuccessResponse
-                        .builder()
-                        .data("SuccessResponse")
-                        .build(),
-                        HttpStatus.OK);
-        */
-        return new ResponseEntity<>
-                (ErrorResponse
-                        .builder()
-                        .error(Error
-                                .builder()
-                                .code("VALIDATION_ERROR")
-                                .message("Ошибка валидации")
-                                .build())
-                        .build(),
-                        HttpStatus.BAD_REQUEST);
+
+        throw CommonException
+                .builder()
+                .code(Code.TEST)
+                .message("Test")
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
 
     }
-   /* public ResponseEntity<Response> test() {
-        return new ResponseEntity<>
-                (ErrorResponse
-                .builder()
-                .error(Error
-                        .builder()
-                        .code("VALIDATION_ERROR")
-                        .message("Ошибка валидации")
-                        .build())
-                .build(),
-                HttpStatus.BAD_REQUEST);
-    }*/
+
 }
