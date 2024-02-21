@@ -1,6 +1,5 @@
 package com.example.demo.domen.api;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,7 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class RegistrationReq {
     @NotBlank(message = "nickname должен быть заполнен")
-    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я. _]{4,15}$", message = "Некорректный nickname")
+    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я. _-]{4,15}$", message = "Некорректный nickname")
     private String nickname;
 
     @NotBlank(message = "password должен быть заполнен")

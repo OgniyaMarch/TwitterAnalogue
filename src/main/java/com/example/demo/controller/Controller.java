@@ -24,13 +24,13 @@ public class Controller {
         return hello;
     }
 
-    @PostMapping("/registration")
-    public ResponseEntity<Response> registration(@RequestBody final RegistrationReq req){
-        log.info("START endpoint registration, request: {}", req);
-        ResponseEntity<Response> response = twitterAnalogueService.registration(req);
-        log.info("END endpoint registration, response: {}", response);
-        return response;
-    }
 
+    @PostMapping("/registration")
+    public ResponseEntity<Response> registration(@RequestBody final RegistrationReq req) {
+        log.info("START endpoint registration, request: {}", req);
+        ResponseEntity<Response> resp = twitterAnalogueService.registration(req);
+        log.info("END endpoint registration, response: {}", resp);
+        return resp;
+    }
 
 }
