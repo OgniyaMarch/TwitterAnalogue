@@ -1,15 +1,13 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.domen.api.RegistrationReq;
 import com.example.demo.domen.response.Response;
 import com.example.demo.service.TwitterAnalogueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -26,12 +24,13 @@ public class Controller {
         return hello;
     }
 
-    @PostMapping("/test")
-    public ResponseEntity<Response> test(){
-        log.info("START endpoint test");
-        ResponseEntity<Response> response = twitterAnalogueService.test();
-        log.info("END endpoint test, response: {}", response);
+    @PostMapping("/registration")
+    public ResponseEntity<Response> registration(@RequestBody final RegistrationReq req){
+        log.info("START endpoint registration, request: {}", req);
+        ResponseEntity<Response> response = twitterAnalogueService.registration(req);
+        log.info("END endpoint registration, response: {}", response);
         return response;
     }
+
 
 }
