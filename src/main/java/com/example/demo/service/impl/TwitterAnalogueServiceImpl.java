@@ -2,6 +2,8 @@ package com.example.demo.service.impl;
 
 
 import com.example.demo.dao.Dao;
+import com.example.demo.domen.api.LoginReq;
+import com.example.demo.domen.api.LoginResp;
 import com.example.demo.domen.api.RegistrationReq;
 import com.example.demo.domen.api.RegistrationResp;
 import com.example.demo.domen.constant.Code;
@@ -46,4 +48,11 @@ public class TwitterAnalogueServiceImpl  implements TwitterAnalogueService {
 
         }
 
+    @Override
+    public ResponseEntity<Response> login(LoginReq req) {
+        String encryptPassword = DigestUtils.md5DigestAsHex(req.getPassword().getBytes());
+        String accessToken = dao.getAccessToken(User.builder().nickname(req.getNickname()).encryptPassword(encryptPassword).build());
+        return new ResponseEntity<>(SuccessResponse.builder().data(LoginResp.builder().accessToken(accessToken).build()).build(), HttpStatus.OK);
+
+    }
 }
