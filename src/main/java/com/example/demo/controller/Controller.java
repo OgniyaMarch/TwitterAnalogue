@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.domen.api.LoginReq;
 import com.example.demo.domen.api.RegistrationReq;
 import com.example.demo.domen.response.Response;
 import com.example.demo.service.TwitterAnalogueService;
@@ -31,6 +32,14 @@ public class Controller {
         ResponseEntity<Response> resp = twitterAnalogueService.registration(req);
         log.info("END endpoint registration, response: {}", resp);
         return resp;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Response> login(@RequestBody final LoginReq req){
+        log.info("START endpoint login, request: {}", req);
+        ResponseEntity<Response> response = twitterAnalogueService.login(req);
+        log.info("END endpoint login, response: {}",response);
+        return response;
     }
 
 }
