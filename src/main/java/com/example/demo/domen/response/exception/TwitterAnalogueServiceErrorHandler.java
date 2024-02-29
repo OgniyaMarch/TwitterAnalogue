@@ -37,7 +37,6 @@ public class TwitterAnalogueServiceErrorHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedErrorException(Exception ex){
-        ex.printStackTrace();
         log.error("internal server error: {}", ex.toString());
         return new ResponseEntity<>(ErrorResponse
                 .builder()

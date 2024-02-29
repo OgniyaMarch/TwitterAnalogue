@@ -54,4 +54,54 @@ public class DaoImpl  extends JdbcDaoSupport implements Dao {
             throw CommonException.builder().code(Code.USER_NOT_FOUND).message("Користувач не знайден").httpStatus(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @Override
+    public void addPostTag(long postId, String tag) {
+        try {
+            jdbcTemplate.update("INSERT IGNORE INTO phrase_tag(phrase_id,tag_id) VALUES (?, (SELECT id FROM tag WHERE text = LOWER(?)));", postId, tag);
+        } catch (Exception ex) {
+            log.error(ex.toString());
+        }
+    }
+
+    @Override
+    public void addTag(String tag) {
+        try {
+            jdbcTemplate.update("INSERT INTO tag(text) SELECT DISTINCT LOWER(?) FROM tag WHERE NOT EXISTS (SELECT text FROM tag WHERE text = LOWER(?));", tag, tag);
+        } catch (Exception ex) {
+            log.error(ex.toString());
+        }
+    }
+
+
+//    @Override
+//    public long addPost(long userId, String text) {
+//        jdbcTemplate.update("INSERT INTO phrase(user_id,text) VALUES (?,?);", userId, text);
+//        return jdbcTemplate.queryForObject("SELECT id FROM phrase WHERE id = LAST_INSERT_ID();", Long.class);
+//    }
+//
+//    @Override
+//    public long getIdByToken(String token) {
+//        try {
+//            return jdbcTemplate.queryForObject("SELECT id FROM user WHERE access_token = ?;", Long.class, token);
+//        } catch (EmptyResultDataAccessException ex) {
+//            log.error(ex.toString());
+//            throw CommonException.builder().code(Code.AUTHORIZATION_ERROR).message("Ошибка авторизации").httpStatus(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
+    @Override
+    public long addPost(long userId, String text) {
+        jdbcTemplate.update("INSERT INTO phrase(user_id,text) VALUES (?,?);", userId, text);
+        return jdbcTemplate.queryForObject("SELECT id FROM phrase WHERE id = LAST_INSERT_ID();", Long.class);
+    }
+
+    @Override
+    public long getIdByToken(String token) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT id FROM user WHERE access_token = ?;", Long.class, token);
+        } catch (EmptyResultDataAccessException ex) {
+            log.error(ex.toString());
+            throw CommonException.builder().code(Code.AUTHORIZATION_ERROR).message("Ошибка авторизации").httpStatus(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }
