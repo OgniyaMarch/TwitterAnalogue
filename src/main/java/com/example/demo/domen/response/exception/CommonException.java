@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 @Builder
 public class CommonException extends RuntimeException{
     private final Code code;
-    private final String message;
+    private final String userMessage;
+    private final String techMessage;
     private final HttpStatus httpStatus;
 }

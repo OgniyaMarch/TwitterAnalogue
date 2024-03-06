@@ -12,4 +12,6 @@ public interface TwitterAnalogueService {
     ResponseEntity<Response> login(LoginReq req);
 
     ResponseEntity<Response> publicPost(PublicPostReq req, String access_token);
+
+    ResponseEntity<Response> getMyPosts(String accessToken);
 }

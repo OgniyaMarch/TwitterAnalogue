@@ -12,5 +12,6 @@ import lombok.Data;
 public class Error {
 
     private Code code;
-    private String message;
+    private String userMessage;
+    private String techMessage;
 }

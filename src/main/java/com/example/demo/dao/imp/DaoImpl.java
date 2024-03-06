@@ -3,6 +3,8 @@ package com.example.demo.dao.imp;
 import com.example.demo.dao.Dao;
 import com.example.demo.domen.constant.Code;
 import com.example.demo.domen.dto.User;
+import com.example.demo.domen.entity.Post;
+import com.example.demo.domen.entity.PostRowMapper;
 import com.example.demo.domen.response.exception.CommonException;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -15,6 +17,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -51,7 +54,7 @@ public class DaoImpl  extends JdbcDaoSupport implements Dao {
                     String.class, user.getNickname(), user.getEncryptPassword());
         } catch (EmptyResultDataAccessException ex){
             log.error(ex.toString());
-            throw CommonException.builder().code(Code.USER_NOT_FOUND).message("Користувач не знайден").httpStatus(HttpStatus.BAD_REQUEST).build();
+            throw CommonException.builder().code(Code.USER_NOT_FOUND).userMessage("Користувач не знайден").httpStatus(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -60,9 +63,25 @@ public class DaoImpl  extends JdbcDaoSupport implements Dao {
         jdbcTemplate.update("INSERT IGNORE INTO phrase_tag(phrase_id,tag_id) VALUES (?, (SELECT id FROM tag WHERE text = LOWER(?)));", postId, tag);
     }
 
+
+    /*
+    INSERT INTO tag(text) SELECT DISTINCT LOWER("погода") FROM tag WHERE NOT EXISTS (SELECT text FROM tag WHERE text = LOWER("погода"));
+    Цей запит не виконує запис до бази даних через те,
+    що він намагається вибрати текст з таблиці tag, якого не існує.
+    Проблема полягає у тому, що у підзапиті також використовується функція LOWER("погода"),
+    що вже є константою, і вона завжди повертає одне і те саме значення.
+    Тому підзапит завжди повертає результат, а саме, що текст "погода" вже існує в таблиці tag,
+    і тому головний запит не вставляє новий рядок.
+     */
     @Override
     public void addTag(String tag) {
-        jdbcTemplate.update("INSERT INTO tag(text) SELECT DISTINCT LOWER(?) FROM tag WHERE NOT EXISTS (SELECT text FROM tag WHERE text = LOWER(?));", tag, tag);
+        jdbcTemplate.update("INSERT INTO tag(text) " +
+                "SELECT DISTINCT LOWER(?) " +
+                "FROM dual " +
+                "WHERE NOT EXISTS (" +
+                "SELECT text " +
+                "FROM tag " +
+                "WHERE text = LOWER(?));", tag, tag);
     }
 
     @Override
@@ -72,12 +91,23 @@ public class DaoImpl  extends JdbcDaoSupport implements Dao {
     }
 
     @Override
-    public long getIdByToken(String accessToken) {
+    public long getUserIdByToken(String accessToken) {
         try {
             return jdbcTemplate.queryForObject("SELECT id FROM user WHERE access_token = ?;", Long.class, accessToken);
         } catch (EmptyResultDataAccessException ex) {
             log.error(ex.toString());
-            throw CommonException.builder().code(Code.AUTHORIZATION_ERROR).message("Ошибка авторизации").httpStatus(HttpStatus.BAD_REQUEST).build();
+            throw CommonException.builder().code(Code.AUTHORIZATION_ERROR).userMessage("Ошибка авторизации").httpStatus(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @Override
+    public List<String> getTagsByPostId(long postId) {
+        return jdbcTemplate.queryForList("SELECT text FROM tag WHERE id IN(SELECT tag_id FROM phrase_tag WHERE phrase_id = ?);", String.class, postId);
+    }
+
+
+    @Override
+    public List<Post> getPostsByUserId(long userId) {
+        return jdbcTemplate.query("SELECT * FROM phrase WHERE user_id = ? ORDER BY time_insert DESC;", new PostRowMapper(), userId);
     }
 }

@@ -50,4 +50,12 @@ public class Controller {
         log.info("END endpoint publicPost, response: {}", response);
         return response;
     }
+
+    @GetMapping("/getMyPosts")
+    public ResponseEntity<Response> getMyPosts(@RequestHeader final String accessToken){
+        log.info("START endpoint getMyPosts, accessToken: {}", accessToken);
+        ResponseEntity<Response> response = twitterAnalogueService.getMyPosts(accessToken);
+        log.info("END endpoint getMyPosts, response: {}", response);
+        return response;
+    }
 }
