@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.domen.api.LoginReq;
-import com.example.demo.domen.api.PublicPostReq;
-import com.example.demo.domen.api.RegistrationReq;
-import com.example.demo.domen.response.Response;
+import com.example.demo.domain.api.LoginReq;
+import com.example.demo.domain.api.PublicPostReq;
+import com.example.demo.domain.api.RegistrationReq;
+import com.example.demo.domain.response.Response;
 import org.springframework.http.ResponseEntity;
 
 public interface TwitterAnalogueService {

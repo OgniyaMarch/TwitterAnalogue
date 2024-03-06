@@ -1,4 +1,4 @@
-package com.example.demo.domen.entity;
+package com.example.demo.domain.entity;
 
 import org.springframework.jdbc.core.RowMapper;
 

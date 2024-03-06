@@ -1,11 +1,11 @@
 package com.example.demo.dao.imp;
 
 import com.example.demo.dao.Dao;
-import com.example.demo.domen.constant.Code;
-import com.example.demo.domen.dto.User;
-import com.example.demo.domen.entity.Post;
-import com.example.demo.domen.entity.PostRowMapper;
-import com.example.demo.domen.response.exception.CommonException;
+import com.example.demo.domain.constant.Code;
+import com.example.demo.domain.dto.User;
+import com.example.demo.domain.entity.Post;
+import com.example.demo.domain.entity.PostRowMapper;
+import com.example.demo.domain.response.exception.CommonException;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;

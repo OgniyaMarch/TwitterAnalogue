@@ -1,4 +1,4 @@
-package com.example.demo.domen.api;
+package com.example.demo.domain.entity;
 
 
 import lombok.AllArgsConstructor;
@@ -6,15 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostResp {
+public class Post {
+
     private long id;
+    private long userId;
     private String text;
     private String timeInsert;
-    private List<String> tags;
 }

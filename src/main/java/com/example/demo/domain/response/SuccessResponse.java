@@ -1,4 +1,4 @@
-package com.example.demo.domen.response;
+package com.example.demo.domain.response;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

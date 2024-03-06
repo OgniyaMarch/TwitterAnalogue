@@ -1,8 +1,8 @@
 package com.example.demo.dao;
 
 
-import com.example.demo.domen.dto.User;
-import com.example.demo.domen.entity.Post;
+import com.example.demo.domain.dto.User;
+import com.example.demo.domain.entity.Post;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

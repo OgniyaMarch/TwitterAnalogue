@@ -1,4 +1,4 @@
-package com.example.demo.domen.api;
+package com.example.demo.domain.api;
 
 
 import jakarta.validation.constraints.NotNull;
@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class LoginReq {
 
   @NotNull(message = "authorization должен быть заполнен")
-  private Authorization authorization;
+  private AuthorizationReq authorizationReq;
 }

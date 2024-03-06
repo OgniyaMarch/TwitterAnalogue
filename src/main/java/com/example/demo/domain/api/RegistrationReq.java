@@ -1,4 +1,4 @@
-package com.example.demo.domen.api;
+package com.example.demo.domain.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,5 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class RegistrationReq {
     @NotNull(message = "authorization должен быть заполнен")
-    private Authorization authorization;
+    private AuthorizationReq authorizationReq;
 }

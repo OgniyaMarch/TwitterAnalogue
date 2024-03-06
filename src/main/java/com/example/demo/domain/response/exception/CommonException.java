@@ -1,7 +1,7 @@
-package com.example.demo.domen.response.exception;
+package com.example.demo.domain.response.exception;
 
 
-import com.example.demo.domen.constant.Code;
+import com.example.demo.domain.constant.Code;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;

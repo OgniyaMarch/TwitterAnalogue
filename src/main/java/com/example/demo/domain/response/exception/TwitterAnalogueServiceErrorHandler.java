@@ -1,9 +1,9 @@
-package com.example.demo.domen.response.exception;
+package com.example.demo.domain.response.exception;
 
 
-import com.example.demo.domen.constant.Code;
-import com.example.demo.domen.response.error.Error;
-import com.example.demo.domen.response.error.ErrorResponse;
+import com.example.demo.domain.constant.Code;
+import com.example.demo.domain.response.error.Error;
+import com.example.demo.domain.response.error.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

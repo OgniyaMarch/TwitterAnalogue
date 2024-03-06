@@ -1,4 +1,4 @@
-package com.example.demo.domen.constant;
+package com.example.demo.domain.constant;
 
 public enum Code {
     REQUEST_VALIDATION_ERROR,

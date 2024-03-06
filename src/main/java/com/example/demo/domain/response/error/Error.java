@@ -1,7 +1,7 @@
-package com.example.demo.domen.response.error;
+package com.example.demo.domain.response.error;
 
 
-import com.example.demo.domen.constant.Code;
+import com.example.demo.domain.constant.Code;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
