@@ -1,4 +1,4 @@
-package com.example.demo.domain.api;
+package com.example.demo.domain.api.user.publicPost;
 
 
 import com.example.demo.domain.constant.RegExp;

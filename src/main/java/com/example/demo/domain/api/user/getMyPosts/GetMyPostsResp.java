@@ -1,15 +1,16 @@
-package com.example.demo.domain.api;
-
+package com.example.demo.domain.api.user.getMyPosts;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResp {
-    private String accessToken;
+public class GetMyPostsResp {
+    private List<PostResp> posts;
 }

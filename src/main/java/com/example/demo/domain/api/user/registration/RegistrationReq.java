@@ -1,5 +1,6 @@
-package com.example.demo.domain.api;
+package com.example.demo.domain.api.user.registration;
 
+import com.example.demo.domain.api.user.common.AuthorizationReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

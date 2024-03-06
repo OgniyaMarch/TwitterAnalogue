@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface Dao {
+public interface UserDao {
     List<String> getTagsByPostId(long postId);
     List<Post> getPostsByUserId(long userId);
     void addPostTag(long postId, String tag);

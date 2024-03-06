@@ -1,4 +1,5 @@
-package com.example.demo.domain.api;
+package com.example.demo.domain.api.user.getMyPosts;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetMyPostsResp {
-    private List<PostResp> posts;
+public class PostResp {
+    private long id;
+    private String text;
+    private String timeInsert;
+    private List<String> tags;
 }

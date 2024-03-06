@@ -1,6 +1,7 @@
-package com.example.demo.domain.api;
+package com.example.demo.domain.api.user.login;
 
 
+import com.example.demo.domain.api.user.common.AuthorizationReq;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

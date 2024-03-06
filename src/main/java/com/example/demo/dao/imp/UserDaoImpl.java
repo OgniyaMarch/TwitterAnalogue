@@ -1,6 +1,6 @@
 package com.example.demo.dao.imp;
 
-import com.example.demo.dao.Dao;
+import com.example.demo.dao.UserDao;
 import com.example.demo.domain.constant.Code;
 import com.example.demo.domain.dto.User;
 import com.example.demo.domain.entity.Post;
@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 @Repository
 @Transactional
-public class DaoImpl  extends JdbcDaoSupport implements Dao {
+public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Autowired
     private DataSource dataSource;

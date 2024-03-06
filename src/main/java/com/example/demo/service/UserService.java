@@ -1,12 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.api.LoginReq;
-import com.example.demo.domain.api.PublicPostReq;
-import com.example.demo.domain.api.RegistrationReq;
+import com.example.demo.domain.api.user.login.LoginReq;
+import com.example.demo.domain.api.user.publicPost.PublicPostReq;
+import com.example.demo.domain.api.user.registration.RegistrationReq;
 import com.example.demo.domain.response.Response;
 import org.springframework.http.ResponseEntity;
 
-public interface TwitterAnalogueService {
+public interface UserService {
     ResponseEntity<Response> registration(RegistrationReq req);
 
     ResponseEntity<Response> login(LoginReq req);

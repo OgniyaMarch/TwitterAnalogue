@@ -1,4 +1,4 @@
-package com.example.demo.domain.api;
+package com.example.demo.domain.api.user.login;
 
 
 import lombok.AllArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistrationResp {
+public class LoginResp {
     private String accessToken;
 }
