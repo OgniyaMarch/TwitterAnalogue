@@ -57,38 +57,14 @@ public class DaoImpl  extends JdbcDaoSupport implements Dao {
 
     @Override
     public void addPostTag(long postId, String tag) {
-        try {
-            jdbcTemplate.update("INSERT IGNORE INTO phrase_tag(phrase_id,tag_id) VALUES (?, (SELECT id FROM tag WHERE text = LOWER(?)));", postId, tag);
-        } catch (Exception ex) {
-            log.error(ex.toString());
-        }
+        jdbcTemplate.update("INSERT IGNORE INTO phrase_tag(phrase_id,tag_id) VALUES (?, (SELECT id FROM tag WHERE text = LOWER(?)));", postId, tag);
     }
 
     @Override
     public void addTag(String tag) {
-        try {
-            jdbcTemplate.update("INSERT INTO tag(text) SELECT DISTINCT LOWER(?) FROM tag WHERE NOT EXISTS (SELECT text FROM tag WHERE text = LOWER(?));", tag, tag);
-        } catch (Exception ex) {
-            log.error(ex.toString());
-        }
+        jdbcTemplate.update("INSERT INTO tag(text) SELECT DISTINCT LOWER(?) FROM tag WHERE NOT EXISTS (SELECT text FROM tag WHERE text = LOWER(?));", tag, tag);
     }
 
-
-//    @Override
-//    public long addPost(long userId, String text) {
-//        jdbcTemplate.update("INSERT INTO phrase(user_id,text) VALUES (?,?);", userId, text);
-//        return jdbcTemplate.queryForObject("SELECT id FROM phrase WHERE id = LAST_INSERT_ID();", Long.class);
-//    }
-//
-//    @Override
-//    public long getIdByToken(String token) {
-//        try {
-//            return jdbcTemplate.queryForObject("SELECT id FROM user WHERE access_token = ?;", Long.class, token);
-//        } catch (EmptyResultDataAccessException ex) {
-//            log.error(ex.toString());
-//            throw CommonException.builder().code(Code.AUTHORIZATION_ERROR).message("Ошибка авторизации").httpStatus(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
     @Override
     public long addPost(long userId, String text) {
         jdbcTemplate.update("INSERT INTO phrase(user_id,text) VALUES (?,?);", userId, text);
@@ -96,9 +72,9 @@ public class DaoImpl  extends JdbcDaoSupport implements Dao {
     }
 
     @Override
-    public long getIdByToken(String token) {
+    public long getIdByToken(String accessToken) {
         try {
-            return jdbcTemplate.queryForObject("SELECT id FROM user WHERE access_token = ?;", Long.class, token);
+            return jdbcTemplate.queryForObject("SELECT id FROM user WHERE access_token = ?;", Long.class, accessToken);
         } catch (EmptyResultDataAccessException ex) {
             log.error(ex.toString());
             throw CommonException.builder().code(Code.AUTHORIZATION_ERROR).message("Ошибка авторизации").httpStatus(HttpStatus.BAD_REQUEST).build();

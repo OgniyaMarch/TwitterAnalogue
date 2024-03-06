@@ -44,7 +44,7 @@ public class Controller {
     }
 
     @PostMapping("/publicPost")
-    public ResponseEntity<Response> publicPost(@RequestHeader String accessToken, @RequestBody final PublicPostReq req){
+    public ResponseEntity<Response> publicPost(@RequestHeader final String accessToken, @RequestBody final PublicPostReq req){
         log.info("START endpoint publicPost, accessToken:{}, request: {}", accessToken, req);
         ResponseEntity<Response> response = twitterAnalogueService.publicPost(req, accessToken);
         log.info("END endpoint publicPost, response: {}", response);
