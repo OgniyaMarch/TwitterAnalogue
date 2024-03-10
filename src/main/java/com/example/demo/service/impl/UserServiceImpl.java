@@ -1,7 +1,9 @@
 package com.example.demo.service.impl;
 
 
+import com.example.demo.dao.CommonDao;
 import com.example.demo.dao.UserDao;
+import com.example.demo.domain.api.common.TagResp;
 import com.example.demo.domain.api.user.getMyPosts.GetMyPostsResp;
 import com.example.demo.domain.api.user.getMyPosts.PostResp;
 import com.example.demo.domain.api.user.login.LoginReq;
@@ -38,10 +40,11 @@ public class UserServiceImpl implements UserService {
 //    private final ValidationUtils validationUtils;
     private final UserDao userDao;
     private final EncryptUtils encryptUtils;
+    private final CommonDao commonDao;
 
     @Override
     public ResponseEntity<Response> publicPost(PublicPostReq req, String access_token) {
-        long userId = userDao.getUserIdByToken(access_token);
+        long userId = commonDao.getUserIdByToken(access_token);
         long phraseId = userDao.addPost(userId, req.getText());
         log.info("userId: {}, phraseId: {}", userId, phraseId);
 
@@ -77,14 +80,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<Response> getMyPosts(String accessToken) {
-        long userId = userDao.getUserIdByToken(accessToken);
+        long userId = commonDao.getUserIdByToken(accessToken);
         List<Post> postList = userDao.getPostsByUserId(userId);
 
         List<PostResp> postRespList = new ArrayList<>();
         for (Post post : postList){
-            List<String> tags = userDao.getTagsByPostId(post.getId());
+            List<TagResp> tags = commonDao.getTagsByPostId(post.getId());
             postRespList.add(PostResp.builder()
-                    .id(post.getId())
+                    .postId(post.getId())
                     .text(post.getText())
                     .timeInsert(post.getTimeInsert())
                     .tags(tags).build());

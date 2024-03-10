@@ -1,7 +1,6 @@
-package com.example.demo.domain.api.search.searchTags;
+package com.example.demo.domain.api.search.searchPostsByTag;
 
 
-import com.example.demo.domain.api.common.TagResp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +12,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchTagsResp {
-    private List<TagResp> tags;
+public class SearchPostsByTagResp {
+    private List<PostResp> posts;
 }

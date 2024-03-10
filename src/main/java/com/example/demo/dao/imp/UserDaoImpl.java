@@ -90,21 +90,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         return jdbcTemplate.queryForObject("SELECT id FROM phrase WHERE id = LAST_INSERT_ID();", Long.class);
     }
 
-    @Override
-    public long getUserIdByToken(String accessToken) {
-        try {
-            return jdbcTemplate.queryForObject("SELECT id FROM user WHERE access_token = ?;", Long.class, accessToken);
-        } catch (EmptyResultDataAccessException ex) {
-            log.error(ex.toString());
-            throw CommonException.builder().code(Code.AUTHORIZATION_ERROR).userMessage("Ошибка авторизации").httpStatus(HttpStatus.BAD_REQUEST).build();
-        }
-    }
-
-    @Override
-    public List<String> getTagsByPostId(long postId) {
-        return jdbcTemplate.queryForList("SELECT text FROM tag WHERE id IN(SELECT tag_id FROM phrase_tag WHERE phrase_id = ?);", String.class, postId);
-    }
-
 
     @Override
     public List<Post> getPostsByUserId(long userId) {

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
 import com.example.demo.domain.api.search.searchTags.SearchTagsReq;
 import com.example.demo.domain.response.Response;
 import com.example.demo.service.SearchService;
@@ -22,6 +23,13 @@ public class SearchController {
         ResponseEntity<Response> response = searchService.searchTags(req, accessToken);
         log.info("END endpoint searchTags, response: {}", response);
         return response;
+    }
 
+    @PostMapping("/searchPostsByTag")
+    public ResponseEntity<Response> searchPostsByTag (@RequestHeader String accessToken, @RequestBody final SearchPostsByTagReq req){
+        log.info("START endpoint searchPostsByTag, accessToken: {}, request: {}", accessToken, req);
+        ResponseEntity<Response> response = searchService.searchPostsByTag(req, accessToken);
+        log.info("END endpoint searchPostsByTag, response: {}", response);
+        return response;
     }
 }

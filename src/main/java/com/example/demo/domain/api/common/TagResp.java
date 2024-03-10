@@ -1,4 +1,4 @@
-package com.example.demo.domain.api.search.searchTags;
+package com.example.demo.domain.api.common;
 
 
 import lombok.AllArgsConstructor;
@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TagResp {
-    private long id;
+    private long tagId;
     private String text;
 }

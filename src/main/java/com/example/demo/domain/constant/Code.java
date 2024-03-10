@@ -7,4 +7,5 @@ public enum Code {
     USER_NOT_FOUND,
     AUTHORIZATION_ERROR,
     MISSING_REQUEST_HEADER,
+    NOT_READABLE,
 }

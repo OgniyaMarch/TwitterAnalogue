@@ -1,4 +1,4 @@
-package com.example.demo.domain.api.user.getMyPosts;
+package com.example.demo.domain.api.search.searchPostsByTag;
 
 
 import com.example.demo.domain.api.common.TagResp;
@@ -15,6 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PostResp {
     private long postId;
+    private long userId;
+    private String nickname;
     private String text;
     private String timeInsert;
     private List<TagResp> tags;

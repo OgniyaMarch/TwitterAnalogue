@@ -1,10 +1,13 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dao.CommonDao;
 import com.example.demo.dao.SearchDao;
-import com.example.demo.dao.UserDao;
+import com.example.demo.domain.api.search.searchPostsByTag.PostResp;
+import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
+import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagResp;
 import com.example.demo.domain.api.search.searchTags.SearchTagsReq;
 import com.example.demo.domain.api.search.searchTags.SearchTagsResp;
-import com.example.demo.domain.api.search.searchTags.TagResp;
+import com.example.demo.domain.api.common.TagResp;
 import com.example.demo.domain.response.Response;
 import com.example.demo.domain.response.SuccessResponse;
 import com.example.demo.service.SearchService;
@@ -21,11 +24,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
     private final SearchDao searchDao;
-    private final UserDao userDao;
+    private final CommonDao commonDao;
+
+    @Override
+    public ResponseEntity<Response> searchPostsByTag(SearchPostsByTagReq req, String accessToken) {
+        commonDao.getUserIdByToken(accessToken);
+        List<PostResp> posts = searchDao.searchPostsByTag(req);
+        for (PostResp postResp : posts){
+            List<TagResp> tags = commonDao.getTagsByPostId(postResp.getPostId());
+            postResp.setTags(tags);
+        }
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(SearchPostsByTagResp.builder()
+                        .posts(posts)
+                        .build())
+                .build(),HttpStatus.OK);
+    }
 
     @Override
     public ResponseEntity<Response> searchTags(SearchTagsReq req, String accessToken) {
-        userDao.getUserIdByToken(accessToken);
+        commonDao.getUserIdByToken(accessToken);
 
         List<TagResp> tagRespList = searchDao.searchTags(req.getPartTag());
         return new ResponseEntity<>(SuccessResponse.builder()

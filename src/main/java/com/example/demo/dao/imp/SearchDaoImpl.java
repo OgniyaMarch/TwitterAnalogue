@@ -2,8 +2,11 @@ package com.example.demo.dao.imp;
 
 
 import com.example.demo.dao.SearchDao;
-import com.example.demo.domain.api.search.searchTags.TagResp;
-import com.example.demo.domain.api.search.searchTags.TagRespRowMapper;
+import com.example.demo.domain.api.common.TagResp;
+import com.example.demo.domain.api.common.TagRespRowMapper;
+import com.example.demo.domain.api.search.searchPostsByTag.PostResp;
+import com.example.demo.domain.api.search.searchPostsByTag.PostRespRowMapper;
+import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -52,23 +55,12 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
                 ,  new TagRespRowMapper(), partTag, partTag);
     }
 
-//        return jdbcTemplate.query("SELECT id, text " +
-//                "FROM (" +
-//                "       select tag.id, text, count(tag.id) as c " +
-//                "       from tag" +
-//                "       join phrase_tag pt ON tag.id = pt.tag_id " +
-//                "       where text like concat(lower(?), '%' " +
-//                "       group by tag.id " +
-//                "       order by count(tag.id) desc) t1" +
-//                "UNION" +
-//                "SELECT id, text " +
-//                "FROM (" +
-//                "       select tag.id, text, count(tag.id) as c " +
-//                "       from tag " +
-//                "       join phrase_tag pt ON tag.id = pt.tag_id " +
-//                "       where text like concat('%', lower(?), '%') " +
-//                "       group by tag.id " +
-//                "       order by count(tag.id) desc) t2;"
-//                , new TagRespRowMapper(), partTag, partTag);
-//    }
+    @Override
+    public List<PostResp> searchPostsByTag(SearchPostsByTagReq req) {
+        return jdbcTemplate.query("SELECT phrase.id AS phrase_id, u.id AS user_id, u.nickname, phrase.text, phrase.time_insert " +
+                "FROM phrase " +
+                "         JOIN user u on phrase.user_id = u.id " +
+                "WHERE phrase.id IN (SELECT phrase_id FROM phrase_tag WHERE tag_id = ?) " +
+                "ORDER BY " + req.getSort().getValue() + ";", new PostRespRowMapper(), req.getTagId());
+    }
 }
