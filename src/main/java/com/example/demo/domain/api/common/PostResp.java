@@ -1,4 +1,4 @@
-package com.example.demo.domain.api.search.searchPostsByTag;
+package com.example.demo.domain.api.common;
 
 
 import com.example.demo.domain.api.common.TagResp;

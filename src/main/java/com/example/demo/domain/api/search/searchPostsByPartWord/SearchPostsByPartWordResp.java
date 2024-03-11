@@ -1,4 +1,4 @@
-package com.example.demo.domain.api.search.searchPostsByTag;
+package com.example.demo.domain.api.search.searchPostsByPartWord;
 
 
 import com.example.demo.domain.api.common.PostResp;
@@ -13,6 +13,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchPostsByTagResp {
+public class SearchPostsByPartWordResp {
     private List<PostResp> posts;
 }

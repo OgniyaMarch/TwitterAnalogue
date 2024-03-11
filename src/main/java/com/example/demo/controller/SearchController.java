@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.domain.api.search.searchPostsByPartWord.SearchPostsByPartWordReq;
 import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
 import com.example.demo.domain.api.search.searchTags.SearchTagsReq;
 import com.example.demo.domain.response.Response;
@@ -30,6 +31,14 @@ public class SearchController {
         log.info("START endpoint searchPostsByTag, accessToken: {}, request: {}", accessToken, req);
         ResponseEntity<Response> response = searchService.searchPostsByTag(req, accessToken);
         log.info("END endpoint searchPostsByTag, response: {}", response);
+        return response;
+    }
+
+    @PostMapping("/searchPostsByPartWord")
+    public ResponseEntity<Response> searchPostsByPartWord(@RequestHeader String accessToken, @RequestBody final SearchPostsByPartWordReq req){
+        log.info("START endpoint searchPostsByPartWord, accessToken: {}, request: {}", accessToken, req);
+        ResponseEntity<Response> response = searchService.searchPostsByPartWord(req, accessToken);
+        log.info("END endpoint searchPostByPartWord, response: {}", response);
         return response;
     }
 }

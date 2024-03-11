@@ -4,8 +4,9 @@ package com.example.demo.dao.imp;
 import com.example.demo.dao.SearchDao;
 import com.example.demo.domain.api.common.TagResp;
 import com.example.demo.domain.api.common.TagRespRowMapper;
-import com.example.demo.domain.api.search.searchPostsByTag.PostResp;
-import com.example.demo.domain.api.search.searchPostsByTag.PostRespRowMapper;
+import com.example.demo.domain.api.common.PostResp;
+import com.example.demo.domain.api.common.PostRespRowMapper;
+import com.example.demo.domain.api.search.searchPostsByPartWord.SearchPostsByPartWordReq;
 import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -62,5 +63,14 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
                 "         JOIN user u on phrase.user_id = u.id " +
                 "WHERE phrase.id IN (SELECT phrase_id FROM phrase_tag WHERE tag_id = ?) " +
                 "ORDER BY " + req.getSort().getValue() + ";", new PostRespRowMapper(), req.getTagId());
+    }
+
+    @Override
+    public List<PostResp> searchPostsByPartWord(SearchPostsByPartWordReq req) {
+        return jdbcTemplate.query("SELECT phrase.id AS phrase_id, u.id AS user_id, u.nickname, phrase.text, phrase.time_insert " +
+                "FROM phrase " +
+                "JOIN user u on phrase.user_id = u.id " +
+                "WHERE phrase.text LIKE CONCAT('%', ?, '%') " +
+                "ORDER BY " + req.getSort().getValue() + ";", new PostRespRowMapper(), req.getPartWord());
     }
 }

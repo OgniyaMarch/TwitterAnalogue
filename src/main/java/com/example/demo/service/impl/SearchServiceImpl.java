@@ -2,7 +2,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.CommonDao;
 import com.example.demo.dao.SearchDao;
-import com.example.demo.domain.api.search.searchPostsByTag.PostResp;
+import com.example.demo.domain.api.common.PostResp;
+import com.example.demo.domain.api.search.searchPostsByPartWord.SearchPostsByPartWordReq;
 import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
 import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagResp;
 import com.example.demo.domain.api.search.searchTags.SearchTagsReq;
@@ -49,6 +50,22 @@ public class SearchServiceImpl implements SearchService {
         return new ResponseEntity<>(SuccessResponse.builder()
                 .data(SearchTagsResp.builder()
                         .tags(tagRespList).build())
+                .build(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Response> searchPostsByPartWord(SearchPostsByPartWordReq req, String accessToken) {
+        commonDao.getUserIdByToken(accessToken);
+
+        List<PostResp> posts = searchDao.searchPostsByPartWord(req);
+        for(PostResp postResp : posts){
+            List<TagResp> tags = commonDao.getTagsByPostId(postResp.getPostId());
+            postResp.setTags(tags);
+        }
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(SearchPostsByTagResp.builder()
+                        .posts(posts)
+                        .build())
                 .build(), HttpStatus.OK);
     }
 }

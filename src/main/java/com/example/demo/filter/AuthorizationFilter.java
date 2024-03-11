@@ -27,7 +27,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             ErrorResponse errorResponse = ErrorResponse.builder()
                     .error(Error.builder()
                             .code(Code.AUTHORIZATION_ERROR)
-                            .userMessage("Ошибка авторизации, выброшенная из фильтра")
+                            .userMessage("Ошибка авторизации")
                             .build())
                     .build();
             log.info("Отсутствует header AccessToken. ErrorResponse: {}", errorResponse);
