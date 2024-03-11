@@ -2,10 +2,7 @@ package com.example.demo.dao.imp;
 
 
 import com.example.demo.dao.SearchDao;
-import com.example.demo.domain.api.common.TagResp;
-import com.example.demo.domain.api.common.TagRespRowMapper;
-import com.example.demo.domain.api.common.PostResp;
-import com.example.demo.domain.api.common.PostRespRowMapper;
+import com.example.demo.domain.api.common.*;
 import com.example.demo.domain.api.search.searchPostsByPartWord.SearchPostsByPartWordReq;
 import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
 import jakarta.annotation.PostConstruct;
@@ -72,5 +69,21 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
                 "JOIN user u on phrase.user_id = u.id " +
                 "WHERE phrase.text LIKE CONCAT('%', ?, '%') " +
                 "ORDER BY " + req.getSort().getValue() + ";", new PostRespRowMapper(), req.getPartWord());
+    }
+
+    @Override
+    public List<UserResp> searchUsersByPartNickname(String partNickname) {
+        return jdbcTemplate.query("SELECT id, nickname " +
+                "FROM (" +
+                "       SELECT id, nickname " +
+                "       FROM user " +
+                "       WHERE nickname LIKE CONCAT(?, '%')) t1 " +
+                "UNION " +
+                "SELECT id, nickname " +
+                "FROM (" +
+                "       SELECT id, nickname " +
+                "       FROM user " +
+                "       WHERE nickname LIKE CONCAT('%', ?, '%')) t2; "
+                        , new UserRespRowMapper(), partNickname, partNickname);
     }
 }

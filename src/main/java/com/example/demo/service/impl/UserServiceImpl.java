@@ -59,14 +59,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
         public ResponseEntity<Response> registration(RegistrationReq req) {
-            if (userDao.isExistsNickname(req.getAuthorizationReq().getNickname())){
+            if (userDao.isExistsNickname(req.getAuthorization().getNickname())){
                 throw CommonException.builder().code(Code.NICKNAME_BUSY).userMessage("This nickname is taken.").httpStatus(HttpStatus.BAD_REQUEST).build();
             }
             String accessToken = UUID.randomUUID().toString().replace("-","") +
                     System.currentTimeMillis();
-            String encryptPassword = encryptUtils.encryptPassword(req.getAuthorizationReq().getPassword());
+            String encryptPassword = encryptUtils.encryptPassword(req.getAuthorization().getPassword());
 
-            userDao.insertNewUser(User.builder().nickname(req.getAuthorizationReq().getNickname()).encryptPassword(encryptPassword).accessToken(accessToken).build());
+            userDao.insertNewUser(User.builder().nickname(req.getAuthorization().getNickname()).encryptPassword(encryptPassword).accessToken(accessToken).build());
             return new ResponseEntity<>(SuccessResponse.builder().data(RegistrationResp.builder().accessToken(accessToken).build()).build(), HttpStatus.OK);
 
         }

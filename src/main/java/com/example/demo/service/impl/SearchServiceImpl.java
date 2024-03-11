@@ -9,6 +9,7 @@ import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagResp;
 import com.example.demo.domain.api.search.searchTags.SearchTagsReq;
 import com.example.demo.domain.api.search.searchTags.SearchTagsResp;
 import com.example.demo.domain.api.common.TagResp;
+import com.example.demo.domain.api.search.searchUsersByPartNickname.SearchUsersByPartNicknameReq;
 import com.example.demo.domain.response.Response;
 import com.example.demo.domain.response.SuccessResponse;
 import com.example.demo.service.SearchService;
@@ -66,6 +67,15 @@ public class SearchServiceImpl implements SearchService {
                 .data(SearchPostsByTagResp.builder()
                         .posts(posts)
                         .build())
+                .build(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Response> searchUsersByPartNickname(SearchUsersByPartNicknameReq req, String accessToken) {
+        commonDao.getUserIdByToken(accessToken);
+
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(searchDao.searchUsersByPartNickname(req.getPartNickname()))
                 .build(), HttpStatus.OK);
     }
 }

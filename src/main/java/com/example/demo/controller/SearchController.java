@@ -4,6 +4,7 @@ package com.example.demo.controller;
 import com.example.demo.domain.api.search.searchPostsByPartWord.SearchPostsByPartWordReq;
 import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
 import com.example.demo.domain.api.search.searchTags.SearchTagsReq;
+import com.example.demo.domain.api.search.searchUsersByPartNickname.SearchUsersByPartNicknameReq;
 import com.example.demo.domain.response.Response;
 import com.example.demo.service.SearchService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,14 @@ public class SearchController {
         log.info("START endpoint searchPostsByPartWord, accessToken: {}, request: {}", accessToken, req);
         ResponseEntity<Response> response = searchService.searchPostsByPartWord(req, accessToken);
         log.info("END endpoint searchPostByPartWord, response: {}", response);
+        return response;
+    }
+
+    @PostMapping("/searchUsersByPartNickname")
+    public ResponseEntity<Response> searchUsersByPartNickname(@RequestHeader String accessToken, @RequestBody final SearchUsersByPartNicknameReq req){
+        log.info("START endpoint searchUsersByPartNickname accessToken: {}, request: {}", accessToken, req);
+        ResponseEntity<Response> response = searchService.searchUsersByPartNickname(req, accessToken);
+        log.info("END endpoint searchUsersByPartNickname, response: {}", response);
         return response;
     }
 }
