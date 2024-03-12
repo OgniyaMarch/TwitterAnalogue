@@ -5,7 +5,6 @@ import com.example.demo.domain.constant.Code;
 import com.example.demo.domain.response.error.Error;
 import com.example.demo.domain.response.error.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingRequestHeaderException;

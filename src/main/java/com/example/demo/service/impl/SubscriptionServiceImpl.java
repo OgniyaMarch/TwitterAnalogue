@@ -2,10 +2,9 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.CommonDao;
 import com.example.demo.dao.SubscriptionDao;
+import com.example.demo.domain.api.common.CommonPostResp;
 import com.example.demo.domain.api.common.PostResp;
-import com.example.demo.domain.api.common.TagResp;
 import com.example.demo.domain.api.communication.getMyPublishers.GetMyPublishersResp;
-import com.example.demo.domain.api.communication.getMyPublishersPosts.GetMyPublishersPostsResp;
 import com.example.demo.domain.api.communication.getMySubscribers.GetMySubscribersResp;
 import com.example.demo.domain.api.communication.subscription.SubscriptionReq;
 import com.example.demo.domain.api.communication.unsubscription.UnsubscriptionReq;
@@ -13,6 +12,7 @@ import com.example.demo.domain.constant.Code;
 import com.example.demo.domain.response.Response;
 import com.example.demo.domain.response.SuccessResponse;
 import com.example.demo.domain.response.exception.CommonException;
+import com.example.demo.service.CommonService;
 import com.example.demo.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +30,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionDao subscriptionDao;
     private final CommonDao commonDao;
+    private final CommonService commonService;
 
     @Override
     public ResponseEntity<Response> getMySubscribers(String accessToken) {
@@ -88,13 +89,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         log.info("userId: {}", userId);
 
         List<PostResp> posts = subscriptionDao.getMyPublishersPosts(userId, from, limit);
-        for (PostResp postResp : posts){
-            List<TagResp> tags = commonDao.getTagsByPostId(postResp.getPostId());
-            postResp.setTags(tags);
-        }
+        commonService.postEnrichment(posts);
 
         return new ResponseEntity<>(SuccessResponse.builder()
-                .data(GetMyPublishersPostsResp.builder()
+                .data(CommonPostResp.builder()
                         .posts(posts)
                         .build())
                 .build(), HttpStatus.OK);

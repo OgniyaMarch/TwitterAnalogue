@@ -3,9 +3,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.CommonDao;
 import com.example.demo.dao.UserDao;
-import com.example.demo.domain.api.common.TagResp;
-import com.example.demo.domain.api.user.getMyPosts.GetMyPostsResp;
-import com.example.demo.domain.api.user.getMyPosts.PostResp;
+import com.example.demo.domain.api.common.PostResp;
+import com.example.demo.domain.api.common.CommonPostResp;
 import com.example.demo.domain.api.user.login.LoginReq;
 import com.example.demo.domain.api.user.login.LoginResp;
 import com.example.demo.domain.api.user.publicPost.PublicPostReq;
@@ -13,16 +12,15 @@ import com.example.demo.domain.api.user.registration.RegistrationReq;
 import com.example.demo.domain.api.user.registration.RegistrationResp;
 import com.example.demo.domain.constant.Code;
 import com.example.demo.domain.dto.User;
-import com.example.demo.domain.entity.Post;
 import com.example.demo.domain.response.Response;
 import com.example.demo.domain.response.SuccessResponse;
 import com.example.demo.domain.response.exception.CommonException;
+import com.example.demo.service.CommonService;
 import com.example.demo.service.UserService;
 
 import com.example.demo.util.EncryptUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final EncryptUtils encryptUtils;
     private final CommonDao commonDao;
+    private final CommonService commonService;
 
     @Override
     public ResponseEntity<Response> publicPost(PublicPostReq req, String access_token) {
@@ -82,15 +81,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<Response> getMyPosts(String accessToken) {
         long userId = commonDao.getUserIdByToken(accessToken);
-        List<Post> postList = userDao.getPostsByUserId(userId);
 
-        List<PostResp> postRespList = new ArrayList<>();
-        for (Post post : postList){
-            List<TagResp> tags = commonDao.getTagsByPostId(post.getId());
-           PostResp postResp = new ModelMapper().map(post, PostResp.class);
-           postResp.setTags(tags);
-           postRespList.add(postResp);
-        }
-        return new ResponseEntity<>(SuccessResponse.builder().data(GetMyPostsResp.builder().posts(postRespList).build()).build(), HttpStatus.OK);
+        List<PostResp> posts = userDao.getPostsByUserId(userId);
+        commonService.postEnrichment(posts);
+
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(CommonPostResp.builder()
+                        .posts(posts)
+                        .build())
+                .build(), HttpStatus.OK);
     }
 }

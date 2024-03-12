@@ -1,10 +1,10 @@
 package com.example.demo.dao.imp;
 
 import com.example.demo.dao.UserDao;
+import com.example.demo.domain.api.common.PostResp;
+import com.example.demo.domain.api.common.PostRespRowMapper;
 import com.example.demo.domain.constant.Code;
 import com.example.demo.domain.dto.User;
-import com.example.demo.domain.entity.Post;
-import com.example.demo.domain.entity.PostRowMapper;
 import com.example.demo.domain.response.exception.CommonException;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -92,7 +92,12 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
 
     @Override
-    public List<Post> getPostsByUserId(long userId) {
-        return jdbcTemplate.query("SELECT * FROM phrase WHERE user_id = ? ORDER BY time_insert DESC;", new PostRowMapper(), userId);
+    public List<PostResp> getPostsByUserId(long userId) {
+        return jdbcTemplate.query("SELECT phrase.id AS phrase_id, u.id AS user_id, u.nickname, phrase.text, phrase.time_insert " +
+                "FROM phrase " +
+                "       JOIN user AS u ON phrase.user_id = u.id " +
+                "WHERE user_id = ? " +
+                "ORDER BY time_insert DESC;",
+                new PostRespRowMapper(), userId);
     }
 }

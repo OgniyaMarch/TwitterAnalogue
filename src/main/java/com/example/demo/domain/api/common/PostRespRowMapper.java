@@ -1,7 +1,7 @@
 package com.example.demo.domain.api.common;
 
 
-import com.example.demo.domain.api.common.PostResp;
+
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

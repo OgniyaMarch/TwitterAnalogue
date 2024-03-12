@@ -2,16 +2,17 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.CommonDao;
 import com.example.demo.dao.SearchDao;
+import com.example.demo.domain.api.common.CommonPostResp;
 import com.example.demo.domain.api.common.PostResp;
 import com.example.demo.domain.api.search.searchPostsByPartWord.SearchPostsByPartWordReq;
 import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagReq;
-import com.example.demo.domain.api.search.searchPostsByTag.SearchPostsByTagResp;
 import com.example.demo.domain.api.search.searchTags.SearchTagsReq;
 import com.example.demo.domain.api.search.searchTags.SearchTagsResp;
 import com.example.demo.domain.api.common.TagResp;
 import com.example.demo.domain.api.search.searchUsersByPartNickname.SearchUsersByPartNicknameReq;
 import com.example.demo.domain.response.Response;
 import com.example.demo.domain.response.SuccessResponse;
+import com.example.demo.service.CommonService;
 import com.example.demo.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,17 +28,16 @@ import java.util.List;
 public class SearchServiceImpl implements SearchService {
     private final SearchDao searchDao;
     private final CommonDao commonDao;
+    private final CommonService commonService;
 
     @Override
     public ResponseEntity<Response> searchPostsByTag(SearchPostsByTagReq req, String accessToken) {
         commonDao.getUserIdByToken(accessToken);
         List<PostResp> posts = searchDao.searchPostsByTag(req);
-        for (PostResp postResp : posts){
-            List<TagResp> tags = commonDao.getTagsByPostId(postResp.getPostId());
-            postResp.setTags(tags);
-        }
+        commonService.postEnrichment(posts);
+
         return new ResponseEntity<>(SuccessResponse.builder()
-                .data(SearchPostsByTagResp.builder()
+                .data(CommonPostResp.builder()
                         .posts(posts)
                         .build())
                 .build(),HttpStatus.OK);
@@ -59,12 +59,10 @@ public class SearchServiceImpl implements SearchService {
         commonDao.getUserIdByToken(accessToken);
 
         List<PostResp> posts = searchDao.searchPostsByPartWord(req);
-        for(PostResp postResp : posts){
-            List<TagResp> tags = commonDao.getTagsByPostId(postResp.getPostId());
-            postResp.setTags(tags);
-        }
+        commonService.postEnrichment(posts);
+
         return new ResponseEntity<>(SuccessResponse.builder()
-                .data(SearchPostsByTagResp.builder()
+                .data(CommonPostResp.builder()
                         .posts(posts)
                         .build())
                 .build(), HttpStatus.OK);

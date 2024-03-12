@@ -1,7 +1,6 @@
 package com.example.demo.domain.api.common;
 
 
-import com.example.demo.domain.api.common.TagResp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +19,5 @@ public class PostResp {
     private String text;
     private String timeInsert;
     private List<TagResp> tags;
+    private long countLikes;
 }
