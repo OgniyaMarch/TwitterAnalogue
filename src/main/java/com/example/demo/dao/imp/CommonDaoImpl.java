@@ -52,4 +52,9 @@ public class CommonDaoImpl extends JdbcDaoSupport implements CommonDao {
                     .build();
         }
     }
+
+    @Override
+    public void testSchedulerLock(String instanceName) {
+        jdbcTemplate.update("INSERT INTO test_scheduler_lock(instance_name) VALUES (?);", instanceName);
+    }
 }

@@ -11,4 +11,6 @@ public interface CommonDao {
     List<TagResp> getTagsByPostId(long postId);
 
     long getUserIdByToken(String accessToken);
+
+    void testSchedulerLock(String instanceName);
 }
