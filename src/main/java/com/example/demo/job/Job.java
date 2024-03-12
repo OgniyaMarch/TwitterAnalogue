@@ -15,7 +15,7 @@ public class Job {
 
     private static int c = 0;
 
-    @Scheduled(cron = "*/3 * * * * *")
+//    @Scheduled(cron = "*/3 * * * * *")
     @SchedulerLock(name = "job")
     public void job() throws InterruptedException{
         log.info("first_instance: {}", ++c);

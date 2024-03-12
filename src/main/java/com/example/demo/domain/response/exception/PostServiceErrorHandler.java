@@ -11,6 +11,10 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @ControllerAdvice
@@ -31,7 +35,7 @@ public class PostServiceErrorHandler {
         return new ResponseEntity<>(ErrorResponse.builder().error(Error.builder()
                         .code(Code.MISSING_REQUEST_HEADER)
                         .techMessage(ex.getMessage())
-                .build()).build(), HttpStatus.BAD_REQUEST);
+                .build()).build(), BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
@@ -40,7 +44,7 @@ public class PostServiceErrorHandler {
         return new ResponseEntity<>(ErrorResponse.builder().error(Error.builder()
                         .code(Code.INTERNAL_SERVER_ERROR)
                         .userMessage("Внутрішня помилка сервісу")
-                .build()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
+                .build()).build(), INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -51,6 +55,16 @@ public class PostServiceErrorHandler {
                         .code(Code.NOT_READABLE)
                         .techMessage(ex.getMessage())
                         .build())
-                .build(), HttpStatus.BAD_REQUEST);
+                .build(), BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex){
+        log.error("MethodArgumentTypeMismatchException: {}", ex.toString());
+        return new ResponseEntity<>(ErrorResponse.builder().error(Error.builder()
+                .code(Code.ARGUMENT_TYPE_MISMATCH)
+                .techMessage(ex.getMessage())
+                .build())
+                .build(), BAD_REQUEST);
     }
 }

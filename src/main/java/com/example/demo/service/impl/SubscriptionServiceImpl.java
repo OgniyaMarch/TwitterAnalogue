@@ -2,7 +2,10 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.CommonDao;
 import com.example.demo.dao.SubscriptionDao;
+import com.example.demo.domain.api.common.PostResp;
+import com.example.demo.domain.api.common.TagResp;
 import com.example.demo.domain.api.communication.getMyPublishers.GetMyPublishersResp;
+import com.example.demo.domain.api.communication.getMyPublishersPosts.GetMyPublishersPostsResp;
 import com.example.demo.domain.api.communication.getMySubscribers.GetMySubscribersResp;
 import com.example.demo.domain.api.communication.subscription.SubscriptionReq;
 import com.example.demo.domain.api.communication.unsubscription.UnsubscriptionReq;
@@ -16,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -75,5 +80,23 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         subscriptionDao.subscription(subUserId, pubUserId);
         return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Response> getMyPublishersPosts(String accessToken, int from, int limit) {
+        long userId = commonDao.getUserIdByToken(accessToken);
+        log.info("userId: {}", userId);
+
+        List<PostResp> posts = subscriptionDao.getMyPublishersPosts(userId, from, limit);
+        for (PostResp postResp : posts){
+            List<TagResp> tags = commonDao.getTagsByPostId(postResp.getPostId());
+            postResp.setTags(tags);
+        }
+
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(GetMyPublishersPostsResp.builder()
+                        .posts(posts)
+                        .build())
+                .build(), HttpStatus.OK);
     }
 }

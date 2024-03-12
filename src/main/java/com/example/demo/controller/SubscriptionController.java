@@ -8,9 +8,11 @@ import com.example.demo.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("twitter-analogue/communication/subscription")
@@ -46,6 +48,14 @@ public class SubscriptionController {
         log.info("START endpoint subscription accessToken: {}, request: {}", accessToken, req);
         ResponseEntity<Response> response = subscriptionService.subscription(req, accessToken);
         log.info("END endpoint subscription, response: {}", response);
+        return response;
+    }
+
+    @GetMapping("/getMyPublishersPosts/{from}/{limit}")
+    public ResponseEntity<Response> getMyPublishersPosts(@RequestHeader String accessToken, @PathVariable int from, @PathVariable int limit){
+        log.info("START endpoint getMyPublishersPosts accessToken: {}, from: {}, limit: {}", accessToken, from, limit);
+        ResponseEntity<Response> response = subscriptionService.getMyPublishersPosts(accessToken, from, limit);
+        log.info("END endpoint getMyPublishersPosts, response: {}", response);
         return response;
     }
 }

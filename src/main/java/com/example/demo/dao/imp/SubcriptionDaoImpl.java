@@ -2,6 +2,8 @@ package com.example.demo.dao.imp;
 
 
 import com.example.demo.dao.SubscriptionDao;
+import com.example.demo.domain.api.common.PostResp;
+import com.example.demo.domain.api.common.PostRespRowMapper;
 import com.example.demo.domain.api.common.UserResp;
 import com.example.demo.domain.api.common.UserRespRowMapper;
 import com.example.demo.domain.constant.Code;
@@ -73,5 +75,18 @@ public class SubcriptionDaoImpl extends JdbcDaoSupport implements SubscriptionDa
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build();
         }
+    }
+
+    @Override
+    public List<PostResp> getMyPublishersPosts(long userId, int from, int limit) {
+        return jdbcTemplate.query("SELECT phrase.id AS phrase_id, phrase.text, phrase.time_insert, phrase.user_id, u.nickname AS nickname " +
+                "FROM phrase " +
+                "       JOIN user AS u ON u.id = phrase.user_id " +
+                "WHERE user_id IN (" +
+                "   SELECT pub_user_id " +
+                "   FROM subscription " +
+                "   WHERE sub_user_id = ?) " +
+                "ORDER BY phrase.time_insert DESC " +
+                "LIMIT ?,?;", new PostRespRowMapper(), userId, from, limit);
     }
 }
