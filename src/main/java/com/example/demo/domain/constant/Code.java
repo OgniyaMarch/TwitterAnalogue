@@ -15,4 +15,6 @@ public enum Code {
     COMMENT_NOT_FOUND,
     NOT_SUPPORTED,
     NOT_YOUR_COMMENT,
+    NOT_BLOCK_YOURSELF,
+    BLOCKED
 }

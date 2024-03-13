@@ -88,4 +88,14 @@ public class CommonDaoImpl extends JdbcDaoSupport implements CommonDao {
             return null;
         }
     }
+
+    @Override
+    public long getUserIdByPostId(long postId) {
+        return jdbcTemplate.queryForObject("SELECT user_id FROM phrase WHERE id = ?", Long.class, postId);
+    }
+
+    @Override
+    public boolean isBlocked(long userId, long checkBlockUserId) {
+        return jdbcTemplate.queryForObject("SELECT EXISTS (SELECT * FROM block WHERE user_id = ? AND block_user_id = ?) AS result;", Integer.class, checkBlockUserId, userId) != 0;
+    }
 }

@@ -32,8 +32,8 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public ResponseEntity<Response> searchPostsByTag(SearchPostsByTagReq req, String accessToken) {
-        commonDao.getUserIdByToken(accessToken);
-        List<PostResp> posts = searchDao.searchPostsByTag(req);
+        long userId = commonDao.getUserIdByToken(accessToken);
+        List<PostResp> posts = searchDao.searchPostsByTag(req, userId);
         commonService.postEnrichment(posts);
 
         return new ResponseEntity<>(SuccessResponse.builder()
@@ -56,9 +56,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public ResponseEntity<Response> searchPostsByPartWord(SearchPostsByPartWordReq req, String accessToken) {
-        commonDao.getUserIdByToken(accessToken);
+        long userId = commonDao.getUserIdByToken(accessToken);
 
-        List<PostResp> posts = searchDao.searchPostsByPartWord(req);
+        List<PostResp> posts = searchDao.searchPostsByPartWord(req, userId);
         commonService.postEnrichment(posts);
 
         return new ResponseEntity<>(SuccessResponse.builder()

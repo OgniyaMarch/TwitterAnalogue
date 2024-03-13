@@ -11,9 +11,9 @@ import java.util.List;
 public interface SearchDao {
     List<TagResp> searchTags(String partTag);
 
-    List<PostResp> searchPostsByTag(SearchPostsByTagReq req);
+    List<PostResp> searchPostsByTag(SearchPostsByTagReq req, long userId);
 
-    List<PostResp> searchPostsByPartWord(SearchPostsByPartWordReq req);
+    List<PostResp> searchPostsByPartWord(SearchPostsByPartWordReq req, long userId);
 
     List<UserResp> searchUsersByPartNickname(String partNickname);
 }

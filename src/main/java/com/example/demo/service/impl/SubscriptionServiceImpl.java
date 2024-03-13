@@ -79,6 +79,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                     .userMessage("Ви не може підписатись на себе").httpStatus(BAD_REQUEST).build();
         }
 
+        commonService.checkBlockByPostId(subUserId, pubUserId);
         subscriptionDao.subscription(subUserId, pubUserId);
         return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
     }

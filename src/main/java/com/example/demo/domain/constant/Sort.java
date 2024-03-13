@@ -2,7 +2,7 @@ package com.example.demo.domain.constant;
 
 public enum Sort {
     RANDOM("RAND()"),
-    TIME_INSERT("phrase.time_insert DESC");
+    TIME_INSERT("time_insert DESC");
 
     private final String value;
 
