@@ -7,6 +7,7 @@ import com.example.demo.domain.response.error.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,4 +67,15 @@ public class PostServiceErrorHandler {
                 .build())
                 .build(), BAD_REQUEST);
     }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handlerHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex){
+        log.error("HttpRequestMethodNotSupportedException: {}", ex.toString());
+        return new ResponseEntity<>(ErrorResponse.builder().error(Error.builder()
+                .code(Code.NOT_SUPPORTED)
+                .techMessage(ex.getMessage())
+                .build())
+                .build(), BAD_REQUEST);
+    }
+
 }

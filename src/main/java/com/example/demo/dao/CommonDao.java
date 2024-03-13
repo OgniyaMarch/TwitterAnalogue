@@ -1,6 +1,7 @@
 package com.example.demo.dao;
 
 
+import com.example.demo.domain.api.common.CommentResp;
 import com.example.demo.domain.api.common.TagResp;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +15,7 @@ public interface CommonDao {
 
     void testSchedulerLock(String instanceName);
 
-    long getCountLikes(long postId);
+    long getCountLikesByPostId(long postId);
+
+    List<CommentResp> getCommentsByPostId(long postId);
 }

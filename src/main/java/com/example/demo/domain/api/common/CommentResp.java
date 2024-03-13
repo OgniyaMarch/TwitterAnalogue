@@ -1,24 +1,18 @@
 package com.example.demo.domain.api.common;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostResp {
-    private long postId;
+public class CommentResp {
     private long userId;
     private String nickname;
+    private long commentId;
     private String text;
     private String timeInsert;
-    private List<TagResp> tags;
-    private long countLikes;
-    private List<CommentResp> comments;
 }

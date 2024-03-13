@@ -1,15 +1,23 @@
 package com.example.demo.dao.imp;
 
 import com.example.demo.dao.ReactionDao;
+import com.example.demo.domain.api.communication.comment.CommentPostReq;
+import com.example.demo.domain.dto.WhoseComment;
+import com.example.demo.domain.dto.WhoseCommentRowMapper;
+import com.example.demo.domain.response.exception.CommonException;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+
+import static com.example.demo.domain.constant.Code.COMMENT_NOT_FOUND;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Slf4j
 @Repository
@@ -36,5 +44,30 @@ public class ReactionDaoImpl extends JdbcDaoSupport implements ReactionDao {
     public void likePost(long userId, long postId) {
         jdbcTemplate.update("INSERT IGNORE INTO like_phrase(phrase_id, user_id) VALUES (?,?);",
                 postId, userId);
+    }
+
+    @Override
+    public void commentPost(long userId, CommentPostReq req) {
+        jdbcTemplate.update("INSERT IGNORE INTO comment(user_id, phrase_id, text) VALUES (?,?,?);",
+                userId, req.getPostId(), req.getText());
+    }
+
+    @Override
+    public void deleteComment(long commentId) {
+        jdbcTemplate.update("DELETE FROM comment WHERE id = ?;", commentId);
+    }
+
+    @Override
+    public WhoseComment whoseComment(long commentId) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT comment.user_id AS comment_user_id, p.user_id AS phrase_user_id " +
+                    "FROM comment JOIN phrase AS p ON p.id = comment.phrase_id " +
+                    "WHERE comment.id = ?;", new WhoseCommentRowMapper(), commentId);
+        } catch (EmptyResultDataAccessException e){
+            throw CommonException.builder()
+                    .code(COMMENT_NOT_FOUND)
+                    .userMessage("Comment isn't found")
+                    .httpStatus(BAD_REQUEST).build();
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.example.demo.dao.imp;
 
 
 import com.example.demo.dao.CommonDao;
+import com.example.demo.domain.api.common.CommentResp;
+import com.example.demo.domain.api.common.CommentRespRowMapper;
 import com.example.demo.domain.api.common.TagResp;
 import com.example.demo.domain.api.common.TagRespRowMapper;
 import com.example.demo.domain.constant.Code;
@@ -64,12 +66,26 @@ public class CommonDaoImpl extends JdbcDaoSupport implements CommonDao {
     }
 
     @Override
-    public long getCountLikes(long postId) {
+    public long getCountLikesByPostId(long postId) {
         try {
             return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM like_phrase WHERE phrase_id = ?;", Long.class, postId);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    @Override
+    public List<CommentResp> getCommentsByPostId(long postId) {
+        try {
+            return jdbcTemplate.query("SELECT comment.id AS comment_id, user_id, nickname, text, comment.time_insert " +
+                    "FROM comment " +
+                    "       JOIN user AS u ON u.id = comment.user_id " +
+                    "WHERE phrase_id = ? " +
+                    "ORDER BY comment.time_insert DESC;", new CommentRespRowMapper(), postId);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 }
